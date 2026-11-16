@@ -9,8 +9,13 @@
 <meta property="og:description" content="PRESS START ▶ 이름을 넣고 퀘스트를 받아줘!">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#4aa8ec">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/galmuri@2.40.3/dist/galmuri.css">
+<link rel="preload" href="fonts/DungGeunMo.subset.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+  /* 둥근모꼴 (퍼블릭 도메인, KS X 1001 한글 2350자 + ASCII 로 줄인 것) — 16px 배수로만 쓴다 */
+  @font-face { font-family: 'DungGeunMo'; src: url('fonts/DungGeunMo.subset.woff2') format('woff2'); font-display: swap; }
+  /* 프리텐다드 (OFL) — 작은 안내 문구용 */
+  @font-face { font-family: 'Pretendard'; font-weight: 400; src: url('fonts/Pretendard-Regular.subset.woff2') format('woff2'); font-display: swap; }
+  @font-face { font-family: 'Pretendard'; font-weight: 600; src: url('fonts/Pretendard-SemiBold.subset.woff2') format('woff2'); font-display: swap; }
   :root {
     --ink: #1d1830;
     --paper: #fff6e0;
@@ -22,6 +27,8 @@
     --sky: #4aa8ec;
     --muted: #6b5d80;
     --outside: #14111f;
+    --pixel: 'DungGeunMo', monospace;
+    --sans: 'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   [hidden] { display: none !important; }
@@ -29,7 +36,8 @@
   body {
     background: var(--outside);
     color: var(--ink);
-    font-family: 'Galmuri11', 'Galmuri9', monospace;
+    font-family: var(--pixel);
+    font-size: 16px;
     -webkit-font-smoothing: none;
     overflow: hidden;
     -webkit-tap-highlight-color: transparent;
@@ -64,13 +72,13 @@
     background: var(--yellow);
     border: 3px solid var(--ink);
     box-shadow: inset -3px -3px 0 var(--yellow-shade), inset 3px 3px 0 #fff3b0, 0 4px 0 var(--ink);
-    font-size: 17px; font-weight: 700;
+    font-size: 16px;
     transform: translateY(0);
   }
   .pbtn:active { transform: translateY(4px); box-shadow: inset -3px -3px 0 var(--yellow-shade), inset 3px 3px 0 #fff3b0, 0 0 0 var(--ink); }
   .pbtn:disabled { background: #cfc6d8; box-shadow: inset -3px -3px 0 #a99fb6, inset 3px 3px 0 #ece6f2, 0 4px 0 var(--ink); color: #6b5d80; cursor: default; }
   .pbtn.ghost { background: #fff; box-shadow: inset -3px -3px 0 #d4cce0, inset 3px 3px 0 #fff, 0 4px 0 var(--ink); }
-  .pbtn.small { min-height: 40px; font-size: 14px; padding: 0 12px; }
+  .pbtn.small { min-height: 40px; font-size: 16px; padding: 0 4px; white-space: nowrap; }
   .blink { animation: blink 1s steps(2, jump-none) infinite; }
   @keyframes blink { 0% { opacity: 1; } 100% { opacity: 0; } }
 
@@ -89,41 +97,39 @@
     min-width: 44px; min-height: 36px; padding: 0 8px;
     background: rgba(255, 246, 224, .9);
     border: 2px solid var(--ink);
-    font-size: 12px;
+    font-size: 16px;
   }
 
   /* ---------- 1 타이틀 ---------- */
   #s-title { align-items: center; justify-content: center; text-align: center; gap: 28px; }
   #s-title.typing { justify-content: flex-start; padding-top: max(40px, env(safe-area-inset-top)); gap: 18px; }
-  .kicker { font-size: 13px; color: #fff; letter-spacing: 2px; text-shadow: 2px 2px 0 var(--ink); }
+  .kicker { font-size: 16px; color: #fff; letter-spacing: 2px; text-shadow: 2px 2px 0 var(--ink); }
   .logo {
-    font-family: 'Galmuri14', 'Galmuri11', monospace;
-    font-weight: 700;
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    font-family: var(--pixel);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
     animation: bob 1.2s steps(2) infinite;
   }
   .logo span { display: block; color: #fff; line-height: 1.15;
     text-shadow: 3px 0 var(--ink), -3px 0 var(--ink), 0 3px var(--ink), 0 -3px var(--ink),
                  3px 3px var(--ink), -3px 3px var(--ink), 3px -3px var(--ink), -3px -3px var(--ink),
                  0 7px #1b4f8f, 3px 7px #1b4f8f, -3px 7px #1b4f8f; }
-  .logo .l1 { font-size: 22px; color: var(--yellow); }
-  .logo .l2, .logo .l3 { font-size: 30px; }
-  #s-title.typing .logo .l2, #s-title.typing .logo .l3 { font-size: 24px; }
+  .logo .l1 { font-size: 32px; color: var(--yellow); }
+  .logo .l2, .logo .l3 { font-size: 32px; }
   @keyframes bob { 0% { transform: translateY(0); } 100% { transform: translateY(-3px); } }
   .press {
     background: none; border: 0; min-height: 48px; padding: 0 16px;
-    font-size: 18px; color: #fff; text-shadow: 2px 2px 0 var(--ink);
+    font-size: 16px; color: #fff; text-shadow: 2px 2px 0 var(--ink);
   }
   .slot { width: 100%; max-width: 340px; padding: 16px; text-align: left; }
-  .slot-head { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--muted); margin-bottom: 10px; }
-  .slot-tag { background: var(--blue); color: #fff; padding: 2px 6px; font-size: 11px; }
-  .slot label { display: block; font-size: 15px; margin-bottom: 8px; }
+  .slot-head { display: flex; justify-content: space-between; align-items: center; font-size: 16px; color: var(--muted); margin-bottom: 10px; }
+  .slot-tag { background: var(--blue); color: #fff; padding: 2px 6px; font-family: var(--sans); font-weight: 600; font-size: 12px; }
+  .slot label { display: block; font-size: 16px; margin-bottom: 8px; }
   .slot-input { display: flex; align-items: center; border-bottom: 3px solid var(--ink); margin-bottom: 16px; }
   .slot-input input {
     flex: 1; min-width: 0; border: 0; outline: 0; background: transparent;
-    font: inherit; font-size: 22px; padding: 6px 2px; color: var(--ink);
+    font: inherit; font-size: 32px; padding: 4px 2px; color: var(--ink);
   }
-  .slot-input .caret { font-size: 22px; }
+  .slot-input .caret { font-size: 32px; }
   .slot .pbtn { width: 100%; }
 
   /* ---------- 2 참가자 확인 ---------- */
@@ -133,12 +139,12 @@
   .hero-wrap .shadow { width: 70%; height: 10px; margin: -6px auto 0; background: rgba(29, 24, 48, .28); }
   .hero-wrap.mystery #hero { animation: tilt 1.2s steps(2) infinite; }
   @keyframes tilt { 0% { transform: rotate(-6deg); } 100% { transform: rotate(6deg); } }
-  .qmark { font-family: 'Galmuri14', monospace; font-size: 40px; font-weight: 700; color: #fff; text-shadow: 3px 3px 0 var(--ink); margin-bottom: 4px; }
-  .note { position: absolute; font-size: 22px; color: #fff; text-shadow: 2px 2px 0 var(--ink); animation: note 1.4s steps(7) forwards; pointer-events: none; }
+  .qmark { font-family: var(--pixel); font-size: 48px; color: #fff; text-shadow: 3px 3px 0 var(--ink); margin-bottom: 4px; }
+  .note { position: absolute; font-size: 32px; color: #fff; text-shadow: 2px 2px 0 var(--ink); animation: note 1.4s steps(7) forwards; pointer-events: none; }
   @keyframes note { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-70px); opacity: 0; } }
   .dialog { position: relative; padding: 18px 16px 16px; min-height: 150px; }
-  .dialog .who { position: absolute; top: -16px; left: 12px; background: var(--ink); color: #fff; font-size: 12px; padding: 4px 8px; }
-  .dialog p { font-size: 19px; line-height: 1.55; min-height: 60px; word-break: keep-all; }
+  .dialog .who { position: absolute; top: -16px; left: 12px; background: var(--ink); color: #fff; font-size: 16px; padding: 4px 8px; }
+  .dialog p { font-size: 16px; line-height: 1.75; min-height: 60px; word-break: keep-all; }
   .actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; flex-wrap: wrap; }
   .actions .pbtn { flex: 1 1 auto; }
   .actions a.pbtn { text-decoration: none; color: inherit; }
@@ -146,55 +152,55 @@
   /* ---------- 3 퀘스트 ---------- */
   #s-quest { overflow-y: auto; -webkit-overflow-scrolling: touch; padding-left: 12px; padding-right: 12px; }
   .quest-spacer { flex: 0 0 var(--quest-top, 40vh); }
-  .arrive { align-self: center; margin-bottom: 12px; padding: 8px 12px; font-size: 15px; }
+  .arrive { align-self: center; margin-bottom: 12px; padding: 8px 12px; font-size: 16px; }
   .quest { padding: 16px 14px 18px; animation: unroll .36s steps(4) both; }
   @keyframes unroll { 0% { clip-path: inset(0 0 100% 0); } 100% { clip-path: inset(0 0 0 0); } }
   .quest-head { display: flex; flex-direction: column; gap: 6px; padding-bottom: 12px; border-bottom: 3px dashed var(--paper-shade); }
-  .badge { align-self: flex-start; background: var(--red); color: #fff; font-size: 12px; padding: 3px 8px; border: 2px solid var(--ink); }
-  .quest-head h2 { font-family: 'Galmuri14', 'Galmuri11', monospace; font-size: 20px; line-height: 1.35; word-break: keep-all; }
+  .badge { align-self: flex-start; background: var(--red); color: #fff; font-size: 16px; padding: 3px 8px; border: 2px solid var(--ink); }
+  .quest-head h2 { font-family: var(--pixel); font-size: 16px; line-height: 1.5; word-break: keep-all; }
   .info { list-style: none; padding: 12px 0; border-bottom: 3px dashed var(--paper-shade); display: grid; gap: 10px; }
-  .info li { display: grid; grid-template-columns: 24px 64px 1fr; align-items: center; gap: 6px; font-size: 16px; }
+  .info li { display: grid; grid-template-columns: 24px 72px 1fr; align-items: center; gap: 6px; font-size: 16px; }
   .info svg { width: 24px; height: 24px; shape-rendering: crispEdges; }
-  .info .k { color: var(--muted); font-size: 14px; }
-  .info .tbd { color: var(--red); font-weight: 700; }
-  .info .tbd small { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 4px; }
-  .reward { padding: 10px 0 4px; font-size: 14px; color: var(--muted); }
-  .reward b { color: var(--ink); }
+  .info .k { color: var(--muted); font-family: var(--sans); font-size: 14px; }
+  .info .tbd { color: var(--red); }
+  .info .tbd small { color: var(--muted); font-family: var(--sans); font-size: 12px; margin-left: 6px; }
+  .reward { padding: 10px 0 4px; font-size: 16px; color: var(--muted); }
+  .reward b { color: var(--ink); font-weight: 400; }
   .choices { display: grid; gap: 8px; margin: 14px 0 16px; }
   .choice {
     display: flex; align-items: center; gap: 8px; min-height: 50px; padding: 0 12px;
-    background: #fff; border: 3px solid var(--ink); text-align: left; font-size: 17px;
+    background: #fff; border: 3px solid var(--ink); text-align: left; font-size: 16px;
   }
   .choice .cur { width: 14px; visibility: hidden; color: var(--red); }
   .choice[aria-checked="true"] { background: #fff1b8; box-shadow: inset 0 0 0 2px var(--yellow); }
   .choice[aria-checked="true"] .cur { visibility: visible; animation: blink .8s steps(2, jump-none) infinite; }
-  .choice small { margin-left: auto; color: var(--muted); font-size: 12px; }
-  .msg-label { display: block; font-size: 14px; margin-bottom: 6px; }
-  .msg-label small { color: var(--muted); }
-  .msg { width: 100%; min-height: 48px; padding: 8px 10px; border: 3px solid var(--ink); background: #fff; font: inherit; font-size: 17px; outline: 0; border-radius: 0; -webkit-appearance: none; }
+  .choice small { margin-left: auto; color: var(--muted); font-family: var(--sans); font-size: 12px; }
+  .msg-label { display: block; font-size: 16px; margin-bottom: 6px; }
+  .msg-label small { color: var(--muted); font-family: var(--sans); font-size: 12px; }
+  .msg { width: 100%; min-height: 48px; padding: 8px 10px; border: 3px solid var(--ink); background: #fff; font: inherit; font-size: 16px; outline: 0; border-radius: 0; -webkit-appearance: none; }
   .msg:focus { box-shadow: inset 0 0 0 2px var(--yellow); }
-  .count { text-align: right; font-size: 12px; color: var(--muted); margin: 4px 0 14px; }
+  .count { text-align: right; font-family: var(--sans); font-size: 12px; color: var(--muted); margin: 4px 0 14px; }
   #send { width: 100%; }
-  .err { margin-top: 10px; color: var(--red); font-size: 14px; }
-  .contact { margin-top: 14px; text-align: center; font-size: 13px; color: var(--muted); }
+  .err { margin-top: 10px; color: var(--red); font-family: var(--sans); font-weight: 600; font-size: 14px; }
+  .contact { margin-top: 14px; text-align: center; font-family: var(--sans); font-size: 13px; color: var(--muted); }
   .contact a { color: var(--blue); }
 
   /* ---------- 4 완료 ---------- */
   #s-done { align-items: center; text-align: center; justify-content: space-between; }
   .done-top { padding-top: 28px; }
   .bigword {
-    font-family: 'Galmuri14', monospace; font-weight: 700; font-size: 40px; color: var(--yellow);
+    font-family: var(--pixel); font-size: 48px; color: var(--yellow);
     text-shadow: 3px 0 var(--ink), -3px 0 var(--ink), 0 3px var(--ink), 0 -3px var(--ink),
                  3px 3px var(--ink), -3px 3px var(--ink), 3px -3px var(--ink), -3px -3px var(--ink), 0 8px #7a2e4a;
     animation: drop .7s steps(6) both;
   }
   @keyframes drop { 0% { transform: translateY(-120px); } 60% { transform: translateY(8px); } 80% { transform: translateY(-6px); } 100% { transform: translateY(0); } }
-  .done-sub { margin-top: 14px; font-size: 15px; color: #fff; text-shadow: 2px 2px 0 var(--ink); }
+  .done-sub { margin-top: 14px; font-size: 16px; color: #fff; text-shadow: 2px 2px 0 var(--ink); }
   .done-bottom { width: 100%; padding: 12px; }
   .done-bottom .row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
   .done-bottom .pbtn { padding: 0 6px; }
   .done-bottom .contact { margin-top: 10px; }
-  .toast { position: absolute; left: 50%; bottom: 120px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 8px 12px; font-size: 14px; z-index: 30; white-space: nowrap; }
+  .toast { position: absolute; left: 50%; bottom: 120px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 8px 12px; font-family: var(--sans); font-size: 14px; z-index: 30; white-space: nowrap; }
 
   @media (prefers-reduced-motion: reduce) {
     .logo, .blink, .hero-wrap.mystery #hero, .choice .cur { animation: none !important; }
@@ -273,8 +279,8 @@
     </div>
     <div class="done-bottom box">
       <div class="row">
-        <button class="pbtn small" id="ics" type="button">캘린더 추가</button>
-        <button class="pbtn small ghost" id="redo" type="button">응답 바꾸기</button>
+        <button class="pbtn small" id="ics" type="button">일정 저장</button>
+        <button class="pbtn small ghost" id="redo" type="button">응답 수정</button>
         <button class="pbtn small ghost" id="copy" type="button">링크 복사</button>
       </div>
       <p class="contact">문의 <a id="d-contact" href="#"></a></p>
@@ -802,6 +808,7 @@
     pickCrew();
     show('done');
     $('done-word').textContent = res.attend === '못 가' ? '다음엔 꼭 보자!' : '그때 보자!';
+    $('done-word').style.fontSize = res.attend === '못 가' ? '32px' : '';
     $('done-word').style.animation = 'none'; void $('done-word').offsetWidth; $('done-word').style.animation = '';
     $('done-sub').textContent = fmtDate(eventAt, true);
     sfx.clear();
