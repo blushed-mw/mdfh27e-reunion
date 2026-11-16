@@ -8,6 +8,11 @@
 <meta property="og:title" content="제1회 명덕외고 27기 영어과 동창회">
 <meta property="og:description" content="PRESS START ▶ 이름을 넣고 퀘스트를 받아줘!">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://blushed-mw.github.io/mdfh27e-reunion/">
+<meta property="og:image" content="https://blushed-mw.github.io/mdfh27e-reunion/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#4aa8ec">
 <link rel="preload" href="fonts/DungGeunMo.subset.woff2" as="font" type="font/woff2" crossorigin>
 <style>
@@ -202,6 +207,19 @@
   .done-bottom .contact { margin-top: 10px; }
   .toast { position: absolute; left: 50%; bottom: 120px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 8px 12px; font-family: var(--sans); font-size: 14px; z-index: 30; white-space: nowrap; }
 
+  /* ---------- 미리보기 이미지 (?og, 1200×630 캡처용) ---------- */
+  body.og #app { max-width: none; width: 1200px; height: 630px; margin: 0; }
+  body.og #sound { display: none; }
+  #s-og { padding: 0 0 0 56px; justify-content: center; gap: 22px; }
+  #s-og .logo { align-items: flex-start; animation: none; gap: 14px; }
+  #s-og .logo .l1 { font-size: 48px; }
+  #s-og .logo .l2, #s-og .logo .l3 { font-size: 64px; }
+  #s-og .logo span { text-shadow: 4px 0 var(--ink), -4px 0 var(--ink), 0 4px var(--ink), 0 -4px var(--ink),
+                 4px 4px var(--ink), -4px 4px var(--ink), 4px -4px var(--ink), -4px -4px var(--ink),
+                 0 10px #1b4f8f, 4px 10px #1b4f8f, -4px 10px #1b4f8f; }
+  .og-date { font-size: 32px; color: #fff; text-shadow: 3px 3px 0 var(--ink); }
+  .og-start { font-size: 32px; color: var(--yellow); text-shadow: 3px 3px 0 var(--ink); }
+
   @media (prefers-reduced-motion: reduce) {
     .logo, .blink, .hero-wrap.mystery #hero, .choice .cur { animation: none !important; }
     .bigword, .quest, .note { animation: none !important; }
@@ -286,8 +304,14 @@
       <p class="contact">문의 <a id="d-contact" href="#"></a></p>
     </div>
   </section>
-</div>
 
+  <!-- 미리보기 이미지 -->
+  <section id="s-og" class="screen" aria-hidden="true">
+    <h1 class="logo"><span class="l1">제1회</span><span class="l2">명덕외고 27기</span><span class="l3">영어과 동창회</span></h1>
+    <p class="og-date" id="og-date"></p>
+    <p class="og-start">▶ PRESS START</p>
+  </section>
+</div>
 <script src="config.js"></script>
 <script src="roster.js"></script>
 <script>
@@ -481,7 +505,7 @@
   const app = $('app');
   let LW = 180, LH = 320, SC = 2;
   let scene = 'title';
-  const SCENE_W = { title: 180, hello: 180, quest: 180, done: 120 };
+  const SCENE_W = { title: 180, hello: 180, quest: 180, done: 120, og: 240 };
   function resize() {
     const w = app.clientWidth, h = app.clientHeight;
     LW = SCENE_W[scene];
@@ -493,7 +517,7 @@
     layoutHero();
     document.documentElement.style.setProperty('--quest-top', Math.round(groundY('quest') * SC * 0.92) + 'px');
   }
-  const groundY = (s) => s === 'title' ? LH - 28 : s === 'hello' ? Math.round(LH * 0.6) : s === 'quest' ? Math.max(96, Math.round(LH * 0.4)) : Math.round(LH * 0.66);
+  const groundY = (s) => s === 'og' ? LH - 20 : s === 'title' ? LH - 28 : s === 'hello' ? Math.round(LH * 0.6) : s === 'quest' ? Math.max(96, Math.round(LH * 0.4)) : Math.round(LH * 0.66);
   const r = (x, y, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), w, h); };
 
   const DAY = { sky: ['#3f9fe6', '#55b2ef', '#6fc2f3', '#8fd2f7', '#b3e1fa'], cloud: '#ffffff', cloudS: '#d4ebfa', lit: 0 };
@@ -626,6 +650,14 @@
         if (c.me) { const by = y - 7 + (Math.floor(t / 400) % 2); r(x + 10, by, 6, 2, '#ffd23f'); r(x + 11, by + 2, 4, 1, '#ffd23f'); r(x + 12, by + 3, 2, 1, '#ffd23f'); }
       });
       if (!reduced && Math.random() < (t < 3000 ? 0.25 : 0.04)) burst(10 + Math.random() * (LW - 20), 12 + Math.random() * (gy - 50), 18, ['#ffd23f', '#ff6b6b', '#7bdcff', '#ffffff', '#b98cff'], 1.2);
+    }
+    if (scene === 'og') {
+      school(92, gy, pal); lawn(gy); tree(76, gy + 2, 0.9);
+      ogCrew.forEach((p, i) => {
+        const x = 104 + i * 27, y = gy + 14 - 34 + (i % 2 ? 2 : 0);
+        r(x + 5, y + 32, 16, 2, 'rgba(29,24,48,.3)');
+        ctx.drawImage(sprite(p, i % 2 ? 'wave2' : 'wave1'), x, y);
+      });
     }
     for (let i = parts.length - 1; i >= 0; i--) {
       const p = parts[i];
@@ -837,12 +869,20 @@
     document.body.appendChild(a); a.click(); a.remove();
   });
 
+  // ---------- 미리보기 이미지 ----------
+  // 특징이 골고루 섞이게 고른 5명 (남·여, 안경, 단발·긴머리·포니테일)
+  const want = [['m', 'glasses'], ['f', 'long'], ['m', 'plain'], ['f', 'ponytail'], ['f', 'bob']];
+  const ogCrew = want.map(([g, k]) => ROSTER.find((p) => p.g === g &&
+    (k === 'glasses' ? p.glasses : k === 'plain' ? !p.glasses : p.hair === k && !p.glasses)));
+  $('og-date').textContent = fmtDate(eventAt, true);
+
   // ---------- 시작 ----------
   window.addEventListener('resize', resize);
   resize();
   requestAnimationFrame(frame);
   // 미리보기용: ?screen=done&name=최목원 처럼 바로 이동 (응답 전송 안 함)
   const q = new URLSearchParams(location.search);
+  if (q.has('og')) { document.body.classList.add('og'); show('og'); }
   if (q.get('name')) me = findPerson(q.get('name'));
   if (q.get('screen') === 'hello') goHello();
   if (q.get('screen') === 'quest') goQuest();
