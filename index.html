@@ -160,7 +160,7 @@
   .info svg { width: 24px; height: 24px; shape-rendering: crispEdges; }
   .info .k { color: var(--muted); font-family: var(--sans); font-size: 14px; }
   .info .tbd { color: var(--red); }
-  .info .tbd small { color: var(--muted); font-family: var(--sans); font-size: 12px; margin-left: 6px; }
+  .info .tbd small, .info .sub { color: var(--muted); font-family: var(--sans); font-size: 12px; margin-left: 6px; }
   .reward { padding: 10px 0 4px; font-size: 16px; color: var(--muted); }
   .reward b { color: var(--ink); font-weight: 400; }
   .choices { display: grid; gap: 8px; margin: 14px 0 16px; }
@@ -172,6 +172,15 @@
   .choice[aria-checked="true"] { background: #fff1b8; box-shadow: inset 0 0 0 2px var(--yellow); }
   .choice[aria-checked="true"] .cur { visibility: visible; animation: blink .8s steps(2, jump-none) infinite; }
   .choice small { margin-left: auto; color: var(--muted); font-family: var(--sans); font-size: 12px; }
+  .deposit { margin: -4px 0 16px; padding: 12px 10px 10px; background: #fff; border: 3px dashed var(--ink); animation: unroll .3s steps(3) both; }
+  .dep-title { font-size: 16px; margin-bottom: 8px; }
+  .dep-title b { color: var(--red); font-weight: 400; }
+  .dep-acct { display: flex; align-items: center; gap: 8px; padding: 6px 8px; background: var(--paper); border: 2px solid var(--ink); }
+  .dep-acct span { flex: 1; font-size: 16px; letter-spacing: .5px; }
+  .dep-acct small { display: block; font-family: var(--sans); font-size: 12px; color: var(--muted); letter-spacing: 0; }
+  .dep-acct .pbtn { min-height: 36px; padding: 0 10px; box-shadow: inset -2px -2px 0 #d4cce0, inset 2px 2px 0 #fff, 0 3px 0 var(--ink); }
+  .dep-acct .pbtn:active { box-shadow: none; transform: translateY(3px); }
+  .deposit .choice { width: 100%; min-height: 48px; margin-top: 10px; justify-content: center; }
   .msg-label { display: block; font-size: 16px; margin-bottom: 6px; }
   .msg-label small { color: var(--muted); font-family: var(--sans); font-size: 12px; }
   .msg { width: 100%; min-height: 48px; padding: 8px 10px; border: 3px solid var(--ink); background: #fff; font: inherit; font-size: 16px; outline: 0; border-radius: 0; -webkit-appearance: none; }
@@ -197,6 +206,22 @@
   .done-bottom .row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
   .done-bottom .pbtn { padding: 0 6px; }
   .done-bottom .contact { margin-top: 10px; }
+  /* 참가자 전용 오픈채팅 CTA — 보물상자 열 듯 눌러 들어가는 버튼 */
+  .cta {
+    position: relative; display: flex; align-items: center; gap: 10px;
+    width: 100%; min-height: 64px; margin: 6px 0 12px; padding: 8px 14px 4px;
+    background: var(--red); color: #fff; text-decoration: none; text-align: left;
+    border: 3px solid var(--ink);
+    box-shadow: inset -3px -3px 0 #a82e3a, inset 3px 3px 0 #ff8a8a, 0 4px 0 var(--ink);
+    text-shadow: 2px 2px 0 #7a1f2a;
+  }
+  .cta:active { transform: translateY(4px); box-shadow: inset -3px -3px 0 #a82e3a, inset 3px 3px 0 #ff8a8a, 0 0 0 var(--ink); }
+  .cta svg { flex: 0 0 32px; width: 32px; height: 32px; shape-rendering: crispEdges; }
+  .cta-text { flex: 1; font-size: 16px; line-height: 1.4; }
+  .cta-text small { display: block; font-family: var(--sans); font-weight: 600; font-size: 12px; color: #ffe0e0; text-shadow: none; }
+  .cta .go { font-size: 16px; animation: nudge .8s steps(2) infinite; }
+  .cta .tag { position: absolute; top: -13px; right: 10px; background: var(--yellow); color: var(--ink); text-shadow: none; border: 2px solid var(--ink); font-size: 16px; line-height: 1; padding: 3px 6px; }
+  @keyframes nudge { 0% { transform: translateX(0); } 100% { transform: translateX(4px); } }
   .toast { position: absolute; left: 50%; bottom: 120px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 8px 12px; font-family: var(--sans); font-size: 14px; z-index: 30; white-space: nowrap; }
 
   /* ---------- 미리보기 이미지 (?og, 1200×630 캡처용) ---------- */
@@ -212,7 +237,7 @@
   .og-start { font-size: 32px; color: var(--yellow); text-shadow: 3px 3px 0 var(--ink); }
 
   @media (prefers-reduced-motion: reduce) {
-    .logo, .blink, .hero-wrap.mystery #hero, .choice .cur { animation: none !important; }
+    .logo, .blink, .hero-wrap.mystery #hero, .choice .cur, .cta .go, .deposit { animation: none !important; }
     .bigword, .quest, .note { animation: none !important; }
     .screen { transition: none !important; }
   }
@@ -270,6 +295,11 @@
         <button type="button" class="choice" role="radio" aria-checked="false" data-v="아직 몰라"><span class="cur">▶</span>아직 몰라<small>보류</small></button>
         <button type="button" class="choice" role="radio" aria-checked="false" data-v="못 가"><span class="cur">▶</span>이번엔 못 가</button>
       </div>
+      <div class="deposit" id="deposit" hidden>
+        <p class="dep-title">참가비 <b id="dep-fee"></b> 선입금 부탁해!</p>
+        <div class="dep-acct"><span id="dep-acct"></span><button class="pbtn ghost" id="dep-copy" type="button">복사</button></div>
+        <button type="button" class="choice" role="checkbox" aria-checked="false" id="dep-done"><span class="cur">▶</span>입금 완료!</button>
+      </div>
       <label class="msg-label" for="msg">친구들에게 한마디 <small>(선택)</small></label>
       <input class="msg" id="msg" maxlength="50" autocomplete="off" enterkeyhint="done">
       <p class="count"><span id="msg-count">0</span>/50</p>
@@ -286,6 +316,12 @@
       <p class="done-sub" id="done-sub"></p>
     </div>
     <div class="done-bottom box">
+      <a class="cta" id="chat" hidden>
+        <span class="tag">참가자 전용</span>
+        <svg viewBox="0 0 8 8" aria-hidden="true"><rect x="1" y="0" width="6" height="1" fill="#1d1830"/><rect x="0" y="1" width="8" height="4" fill="#1d1830"/><rect x="1" y="1" width="6" height="4" fill="#ffd23f"/><rect x="1" y="5" width="6" height="1" fill="#1d1830"/><rect x="2" y="6" width="2" height="1" fill="#1d1830"/><rect x="2" y="5" width="2" height="1" fill="#ffd23f"/><rect x="2" y="3" width="1" height="1" fill="#1d1830"/><rect x="4" y="3" width="1" height="1" fill="#1d1830"/><rect x="6" y="3" width="1" height="1" fill="#1d1830"/></svg>
+        <span class="cta-text">동창회 단톡방 입장<small>장소랑 소식은 여기서 알려줄게</small></span>
+        <span class="go">▶</span>
+      </a>
       <div class="row">
         <button class="pbtn small" id="ics" type="button">일정 저장</button>
         <button class="pbtn small ghost" id="redo" type="button">응답 수정</button>
@@ -475,7 +511,12 @@
     layoutHero();
     document.documentElement.style.setProperty('--quest-top', Math.round(groundY('quest') * SC * 0.92) + 'px');
   }
-  const groundY = (s) => s === 'og' ? LH - 20 : s === 'title' ? LH - 28 : s === 'hello' ? Math.round(LH * 0.6) : s === 'quest' ? Math.max(96, Math.round(LH * 0.4)) : Math.round(LH * 0.66);
+  // 완료 화면은 아래 상자(단톡방 버튼 등)에 캐릭터가 가리지 않게 상자 위로 올린다
+  const doneGround = () => {
+    const top = document.querySelector('.done-bottom').offsetTop;
+    return Math.min(Math.round(LH * 0.66), top ? Math.floor(top / SC) - 30 : LH);
+  };
+  const groundY = (s) => s === 'og' ? LH - 20 : s === 'title' ? LH - 28 : s === 'hello' ? Math.round(LH * 0.6) : s === 'quest' ? Math.max(96, Math.round(LH * 0.4)) : doneGround();
   const r = (x, y, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), w, h); };
 
   const DAY = { sky: ['#3f9fe6', '#55b2ef', '#6fc2f3', '#8fd2f7', '#b3e1fa'], cloud: '#ffffff', cloudS: '#d4ebfa', lit: 0 };
@@ -729,22 +770,46 @@
   // ---------- 3 퀘스트 ----------
   const tbd = (v) => v ? v : '<span class="tbd">???<small>(곧 공개)</small></span>';
   $('q-date').textContent = fmtDate(eventAt, true);
-  $('q-place').innerHTML = C.place ? '' : tbd(null);
-  if (C.place) $('q-place').textContent = C.place;
-  $('q-fee').innerHTML = C.fee ? '' : tbd(null);
-  if (C.fee) $('q-fee').textContent = C.fee;
+  const withSub = (el, v, sub) => {
+    if (!v) { el.innerHTML = tbd(null); return; }
+    el.textContent = v;
+    if (sub) { const s = document.createElement('small'); s.className = 'sub'; s.textContent = sub; el.appendChild(s); }
+  };
+  withSub($('q-place'), C.place, C.placeNote && `(${C.placeNote})`);
+  withSub($('q-fee'), C.fee, C.deposit && '(선입금)');
+  const acctText = C.deposit ? `${C.deposit.bank} ${C.deposit.account}` : '';
+  $('dep-fee').textContent = C.fee || '';
+  $('dep-acct').textContent = acctText;
+  if (C.deposit && C.deposit.holder) { const h = document.createElement('small'); h.textContent = '예금주 ' + C.deposit.holder; $('dep-acct').appendChild(h); }
+  async function copyAcct() {
+    try { await navigator.clipboard.writeText(acctText); toast('계좌번호 복사 완료!'); }
+    catch { prompt('계좌번호를 복사해줘', acctText); }
+  }
+  $('dep-copy').addEventListener('click', copyAcct);
   $('q-deadline').textContent = fmtDate(deadlineAt).slice(5);
   [$('q-contact'), $('d-contact')].forEach((a) => { a.textContent = `${C.organizer.name} ${C.organizer.phone}`; a.href = tel; });
 
-  let attend = null;
+  let attend = null, deposit = null;
   const SEND_LABEL = { '갈게': '퀘스트 수락 ▶', '아직 몰라': '일단 보류 ▶', '못 가': '보내기 ▶' };
+  const needDeposit = () => attend === '갈게' && !!C.deposit;
+  function refreshSend() {
+    const waiting = needDeposit() && !deposit;
+    $('send').disabled = !attend || waiting;
+    $('send').textContent = !attend ? '참석 여부를 골라줘' : waiting ? '입금하고 입금 완료를 눌러줘' : SEND_LABEL[attend];
+  }
   function pick(v) {
     attend = v;
-    document.querySelectorAll('.choice').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.v === v)));
-    $('send').disabled = !v;
-    $('send').textContent = v ? SEND_LABEL[v] : '참석 여부를 골라줘';
+    document.querySelectorAll('.choice[data-v]').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.v === v)));
+    $('deposit').hidden = !needDeposit();
+    refreshSend();
   }
-  document.querySelectorAll('.choice').forEach((b) => b.addEventListener('click', () => { pick(b.dataset.v); }));
+  function pickDeposit(v) {
+    deposit = v;
+    $('dep-done').setAttribute('aria-checked', String(v === '입금 완료'));
+    refreshSend();
+  }
+  document.querySelectorAll('.choice[data-v]').forEach((b) => b.addEventListener('click', () => { pick(b.dataset.v); }));
+  $('dep-done').addEventListener('click', () => { pickDeposit(deposit ? null : '입금 완료'); });
   $('msg').addEventListener('input', () => { $('msg-count').textContent = $('msg').value.length; });
 
   function goQuest() {
@@ -752,6 +817,7 @@
     $('s-quest').scrollTop = 0;
     const prev = store.get('response');
     const same = prev && me && prev.idx === me.idx;
+    pickDeposit(same ? prev.deposit || null : null);
     pick(same ? prev.attend : null);
     $('msg').value = same ? prev.message || '' : '';
     $('msg-count').textContent = $('msg').value.length;
@@ -768,11 +834,12 @@
     body.set(f.entries.name, res.typed);
     body.set(f.entries.attend, res.attend);
     if (res.message) body.set(f.entries.message, res.message);
+    if (res.deposit && f.entries.deposit) body.set(f.entries.deposit, res.deposit);
     await fetch(`https://docs.google.com/forms/d/e/${f.id}/formResponse`, { method: 'POST', mode: 'no-cors', body });
   }
   $('send').addEventListener('click', async () => {
     if (!attend || !me) return;
-    const res = { idx: me.idx, typed: me.typed, attend, message: $('msg').value.trim(), at: Date.now() };
+    const res = { idx: me.idx, typed: me.typed, attend, deposit: needDeposit() ? deposit : null, message: $('msg').value.trim(), at: Date.now() };
     $('send').disabled = true;
     $('send').textContent = '보내는 중…';
     $('send-err').hidden = true;
@@ -795,6 +862,9 @@
     $('done-word').style.fontSize = res.attend === '못 가' ? '32px' : '';
     $('done-word').style.animation = 'none'; void $('done-word').offsetWidth; $('done-word').style.animation = '';
     $('done-sub').textContent = fmtDate(eventAt, true);
+    const going = res.attend === '갈게';
+    $('chat').hidden = !(going && C.openChat);
+    if (C.openChat) $('chat').href = C.openChat;
   }
   $('redo').addEventListener('click', goQuest);
   function toast(msg) {
@@ -836,8 +906,8 @@
   if (q.has('og')) { document.body.classList.add('og'); show('og'); }
   if (q.get('name')) me = findPerson(q.get('name'));
   if (q.get('screen') === 'hello') goHello();
-  if (q.get('screen') === 'quest') goQuest();
-  if (q.get('screen') === 'done') goDone({ attend: q.get('attend') || '갈게' });
+  if (q.get('screen') === 'quest') { goQuest(); if (q.get('attend')) pick(q.get('attend')); }
+  if (q.get('screen') === 'done') goDone({ attend: q.get('attend') || '갈게', deposit: q.get('deposit') });
 })();
 </script>
 </body>
