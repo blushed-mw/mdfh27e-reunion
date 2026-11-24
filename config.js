@@ -4,7 +4,7 @@ window.INVITE_CONFIG = {
   date: '2027-01-09T18:00:00+09:00',
   place: '합정역 인근',
   placeNote: '추후 안내',
-  fee: '10,000원',
+  fee: '20,000원',
   // 선입금 안내 — '갈게'를 고른 사람에게만 퀘스트 창에 보인다
   deposit: { bank: '우리', account: '1002462137116', holder: '최목원' },
   deadline: '2026-11-30',
