@@ -325,7 +325,7 @@
       <div class="row">
         <button class="pbtn small" id="ics" type="button">일정 저장</button>
         <button class="pbtn small ghost" id="redo" type="button">응답 수정</button>
-        <button class="pbtn small ghost" id="copy" type="button">링크 복사</button>
+        <button class="pbtn small ghost" id="copy" type="button">카톡 공유</button>
       </div>
       <p class="contact">문의 <a id="d-contact" href="#"></a></p>
     </div>
@@ -338,8 +338,9 @@
     <p class="og-start">▶ PRESS START</p>
   </section>
 </div>
-<script src="config.js?v=20261124b"></script>
-<script src="roster.js?v=20261124b"></script>
+<script src="config.js?v=20261124c"></script>
+<script src="roster.js?v=20261124c"></script>
+<script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js" crossorigin="anonymous" async></script>
 <script>
 (() => {
   const C = window.INVITE_CONFIG;
@@ -873,8 +874,31 @@
     app.appendChild(t);
     setTimeout(() => t.remove(), 1600);
   }
+  // 카톡 공유: SDK가 안 뜨면(키 없음·차단) 링크 복사로 대신함
+  const kakaoReady = () => {
+    const K = window.Kakao;
+    if (!K || !C.kakao || !C.kakao.jsKey) return null;
+    if (!K.isInitialized()) K.init(C.kakao.jsKey);
+    return K;
+  };
   $('copy').addEventListener('click', async () => {
     const url = location.origin + location.pathname;
+    const link = { mobileWebUrl: url, webUrl: url };
+    try {
+      const K = kakaoReady();
+      if (K) {
+        K.Share.sendDefault({
+          objectType: 'feed',
+          content: {
+            title: C.title,
+            description: fmtDate(eventAt, true) + (C.place ? ' · ' + C.place : ''),
+            imageUrl: new URL('og.png', url).href, imageWidth: 1200, imageHeight: 630, link,
+          },
+          buttons: [{ title: C.kakao.button || '초대장 열기', link }],
+        });
+        return;
+      }
+    } catch { /* 링크 복사로 넘어감 */ }
     try { await navigator.clipboard.writeText(url); toast('링크 복사 완료!'); }
     catch { prompt('이 링크를 복사해줘', url); }
   });

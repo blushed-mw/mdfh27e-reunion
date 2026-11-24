@@ -11,6 +11,8 @@ window.INVITE_CONFIG = {
   organizer: { name: '전혜서', phone: '010-8958-3383' },
   // '갈게'로 응답한 사람의 완료 화면에만 나오는 오픈채팅방
   openChat: 'https://open.kakao.com/o/gpirWPXi',
+  // 카카오톡 공유 메시지. jsKey 는 developers.kakao.com 앱의 JavaScript 키 (등록 도메인에서만 동작). null이면 링크 복사로 대신함
+  kakao: { jsKey: 'b82a36adbd1f8d3a0de318d691f8d3ca', button: '퀘스트 받기' },
   // 구글폼 ID와 질문별 entry ID (미리 채워진 링크에서 확인). 비어 있으면 응답은 이 기기에만 남음
   // attend 값은 폼 객관식 보기 글자와 정확히 같아야 한다: 갈게 / 아직 몰라 / 못 가
   // deposit 은 폼에 '선입금' 단답형 질문을 만든 뒤 entry ID 를 넣는다. 값: 입금 완료 ('갈게'는 입금 완료를 눌러야만 보낼 수 있다. null이면 안 보냄)
